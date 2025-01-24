@@ -1,49 +1,58 @@
 #include <stdio.h>
-#include <string.h>
+#define NUM_ESTADOS 8
+#define CIDADES_POR_ESTADO 4
 
-// Desafio Super Trunfo - Países
-// Tema 1 - Cadastro das Cartas
-
-int main() {
-    // Variáveis para armazenar os atributos da carta
-    char codigo[5];
-    char nomeCidade[50];
+// Estrutura para representar uma carta de cidade
+typedef struct {
+    char codigo[4]; // Código no formato "A01", "B02", etc.
     int populacao;
     float area;
-    float pib;
-    int pontosTuristicos;
+    double pib;
+    int pontos_turisticos;
+} Carta;
 
-    // Cadastro das Cartas:
-    printf("Bem-vindo ao sistema de cadastro de cartas do Super Trunfo - Países!\n");
+void cadastrarCartas(Carta cartas[NUM_ESTADOS][CIDADES_POR_ESTADO]) {
+    char estado;
+    for (int i = 0; i < NUM_ESTADOS; i++) {
+        estado = 'A' + i; // Estados de A a H
+        for (int j = 0; j < CIDADES_POR_ESTADO; j++) {
+            Carta *carta = &cartas[i][j];
+            sprintf(carta->codigo, "%c%02d", estado, j + 1);
 
-    printf("Digite o código da carta: ");
-    scanf("%s", codigo);
+            printf("\nCadastro da cidade %s:\n", carta->codigo);
+            printf("Populacao: ");
+            scanf("%d", &carta->populacao);
+            printf("Area (km^2): ");
+            scanf("%f", &carta->area);
+            printf("PIB (em milhoes): ");
+            scanf("%lf", &carta->pib);
+            printf("Numero de pontos turisticos: ");
+            scanf("%d", &carta->pontos_turisticos);
+        }
+    }
+}
 
-    printf("Digite o nome da cidade: ");
-    getchar(); // Limpa o buffer antes de capturar a string
-    fgets(nomeCidade, sizeof(nomeCidade), stdin);
-    nomeCidade[strcspn(nomeCidade, "\n")] = '\0'; // Remove o '\n' do final
+void exibirCartas(Carta cartas[NUM_ESTADOS][CIDADES_POR_ESTADO]) {
+    printf("\n---- Cartas cadastradas ----\n");
+    for (int i = 0; i < NUM_ESTADOS; i++) {
+        for (int j = 0; j < CIDADES_POR_ESTADO; j++) {
+            Carta *carta = &cartas[i][j];
+            printf("\nCidade %s:\n", carta->codigo);
+            printf("Populacao: %d\n", carta->populacao);
+            printf("Area: %.2f km^2\n", carta->area);
+            printf("PIB: %.2f milhoes\n", carta->pib);
+            printf("Pontos turisticos: %d\n", carta->pontos_turisticos);
+        }
+    }
+}
 
-    printf("Digite a população da cidade: ");
-    scanf("%d", &populacao);
+int main() {
+    Carta cartas[NUM_ESTADOS][CIDADES_POR_ESTADO];
 
-    printf("Digite a área da cidade em km²: ");
-    scanf("%f", &area);
+    printf("--- Cadastro de Cartas: Super Trunfo - Paises ---\n");
+    cadastrarCartas(cartas);
 
-    printf("Digite o PIB da cidade: ");
-    scanf("%f", &pib);
-
-    printf("Digite o número de pontos turísticos: ");
-    scanf("%d", &pontosTuristicos);
-
-    // Exibição dos Dados das Cartas:
-    printf("\n--- Dados da Carta ---\n");
-    printf("Código: %s\n", codigo);
-    printf("Cidade: %s\n", nomeCidade);
-    printf("População: %d\n", populacao);
-    printf("Área: %.2f km²\n", area);
-    printf("PIB: %.2f\n", pib);
-    printf("Pontos Turísticos: %d\n", pontosTuristicos);
+    exibirCartas(cartas);
 
     return 0;
 }
